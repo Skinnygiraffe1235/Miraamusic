@@ -503,8 +503,10 @@ function initPlayer() {
   scWidget = SC.Widget(scIframe);
   scWidget.bind(SC.Widget.Events.READY, () => {
     scWidget.getDuration(d => { duration = d; });
+    // Wait for the widget to actually be ready before issuing the first load —
+    // on slower devices this can otherwise fire too early and be dropped.
+    loadTrack(0, false);
   });
-  loadTrack(0, false);
   scWidget.bind(SC.Widget.Events.PLAY, () => {
     if (currentSource !== 'soundcloud') return;
     isPlaying = true; updatePlayIcon();
