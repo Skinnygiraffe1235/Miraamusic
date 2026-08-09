@@ -232,7 +232,7 @@ const tracks = [
   { title: 'Milano Sunset 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/milano-sunset-01', accent: '#e8562f' },
   { title: 'California Orange', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/california-orange', accent: '#ca919d' },
   { title: 'Melodic Techno Mix 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/melodic-techno-mix-01', accent: '#8a3fae' },
-  { title: 'The Fourth State of Matter', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://api.soundcloud.com/tracks/2372665031', accent: '#641460' },
+  { title: 'The Fourth State of Matter', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/spaceout', accent: '#641460' },
   { title: 'Funk & Soul', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:5wHdvjWLoV2xavZC3bHOIy', accent: '#1DB954' },
   { title: 'Funky House', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:0zqOpSn5I5uRfCQuwm90pI', accent: '#1DB954' },
   { title: 'Deep House & Lounge', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:3sjXD8J3RaO0BMsPboQFYW', accent: '#1DB954' },
@@ -288,8 +288,6 @@ const iconPlay = document.querySelector('.pb-icon-play');
 const iconPause = document.querySelector('.pb-icon-pause');
 
 let scWidget = null;
-let scReady = false;
-let pendingSoundCloudLoad = null;
 let currentTrackIndex = -1;
 let isPlaying = false;
 let duration = 0;
@@ -427,13 +425,9 @@ function loadSoundCloudTrack(track, autoplay) {
   currentSource = 'soundcloud';
   spotifyController?.pause();
   if (!scWidget) return;
-  if (!scReady) {
-    pendingSoundCloudLoad = { track, autoplay };
-    return;
-  }
 
   scWidget.load(track.url, {
-    auto_play: false,
+    auto_play: !!autoplay,
     callback: () => {
       scWidget.getDuration(d => {
         duration = d;
@@ -444,10 +438,6 @@ function loadSoundCloudTrack(track, autoplay) {
       });
     }
   });
-
-  if (autoplay) {
-    scWidget.play();
-  }
 }
 
 function loadSpotifyTrack(track, autoplay) {
@@ -512,15 +502,10 @@ function prevTrack() {
 function initPlayer() {
   scWidget = SC.Widget(scIframe);
   scWidget.bind(SC.Widget.Events.READY, () => {
-    scReady = true;
     scWidget.getDuration(d => { duration = d; });
     // Wait for the widget to actually be ready before issuing the first load —
     // on slower devices this can otherwise fire too early and be dropped.
     loadTrack(0, false);
-    if (pendingSoundCloudLoad) {
-      loadSoundCloudTrack(pendingSoundCloudLoad.track, pendingSoundCloudLoad.autoplay);
-      pendingSoundCloudLoad = null;
-    }
   });
   scWidget.bind(SC.Widget.Events.PLAY, () => {
     if (currentSource !== 'soundcloud') return;
