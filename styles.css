@@ -233,7 +233,7 @@ section{
 .headline em{ font-style: italic; font-weight: 500; }
 .headline-sm{ font-size: clamp(25px, 3.4vw, 38px); }
 .subline{
-  font-size: clamp(14px, 1.5vw, 17px);
+  font-size: clamp(15px, 1.5vw, 18px);
   line-height: 1.5;
   margin-top: 18px;
   color: var(--sub);
@@ -603,7 +603,17 @@ section{
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   border-top: 1px solid color-mix(in srgb, var(--player-accent) 20%, transparent);
 }
-.pb-sc-frame{ display: none; }
+.pb-sc-frame{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  opacity: 0.01;
+  pointer-events: none;
+  z-index: -1;
+}
 
 .pb-progress{
   height: 5px;
