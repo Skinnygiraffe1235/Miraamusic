@@ -230,7 +230,7 @@ window.addEventListener('resize', () => {
 
 const tracks = [
   { title: 'Milano Sunset 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/milano-sunset-01', accent: '#e8562f' },
-  { title: 'California Orange', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://api.soundcloud.com/tracks/2372670035', accent: '#ca919d' },
+  { title: 'California Orange', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/california-orange', accent: '#ca919d' },
   { title: 'Melodic Techno Mix 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/melodic-techno-mix-01', accent: '#8a3fae' },
   { title: 'The Fourth State of Matter', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://api.soundcloud.com/tracks/2372665031', accent: '#641460' },
   { title: 'Funk & Soul', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:5wHdvjWLoV2xavZC3bHOIy', accent: '#1DB954' },
