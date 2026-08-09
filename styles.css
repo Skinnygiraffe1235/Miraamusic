@@ -604,13 +604,13 @@ section{
   border-top: 1px solid color-mix(in srgb, var(--player-accent) 20%, transparent);
 }
 .pb-sc-frame{
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 1px;
-  height: 1px;
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 100%;
+  height: 80px;
   border: 0;
-  opacity: 0.01;
+  opacity: 0;
   pointer-events: none;
   z-index: -1;
 }
