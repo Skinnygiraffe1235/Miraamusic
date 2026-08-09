@@ -288,6 +288,8 @@ const iconPlay = document.querySelector('.pb-icon-play');
 const iconPause = document.querySelector('.pb-icon-pause');
 
 let scWidget = null;
+let scReady = false;
+let pendingSoundCloudLoad = null;
 let currentTrackIndex = -1;
 let isPlaying = false;
 let duration = 0;
@@ -425,9 +427,13 @@ function loadSoundCloudTrack(track, autoplay) {
   currentSource = 'soundcloud';
   spotifyController?.pause();
   if (!scWidget) return;
+  if (!scReady) {
+    pendingSoundCloudLoad = { track, autoplay };
+    return;
+  }
 
   scWidget.load(track.url, {
-    auto_play: !!autoplay,
+    auto_play: false,
     callback: () => {
       scWidget.getDuration(d => {
         duration = d;
@@ -438,6 +444,10 @@ function loadSoundCloudTrack(track, autoplay) {
       });
     }
   });
+
+  if (autoplay) {
+    scWidget.play();
+  }
 }
 
 function loadSpotifyTrack(track, autoplay) {
@@ -502,10 +512,15 @@ function prevTrack() {
 function initPlayer() {
   scWidget = SC.Widget(scIframe);
   scWidget.bind(SC.Widget.Events.READY, () => {
+    scReady = true;
     scWidget.getDuration(d => { duration = d; });
     // Wait for the widget to actually be ready before issuing the first load —
     // on slower devices this can otherwise fire too early and be dropped.
     loadTrack(0, false);
+    if (pendingSoundCloudLoad) {
+      loadSoundCloudTrack(pendingSoundCloudLoad.track, pendingSoundCloudLoad.autoplay);
+      pendingSoundCloudLoad = null;
+    }
   });
   scWidget.bind(SC.Widget.Events.PLAY, () => {
     if (currentSource !== 'soundcloud') return;
