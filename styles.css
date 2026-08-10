@@ -111,7 +111,10 @@ a:focus-visible, button:focus-visible{
 
 .stars{
   position: fixed;
-  inset: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: var(--bg-fixed-h, 100svh);
   z-index: -2;
   opacity: var(--mix);
   pointer-events: none;
@@ -874,12 +877,51 @@ section{
 }
 
 @media (max-width: 640px){
-  :root{ --header-h: 70px; --section-pad: 60px; }
-  .phase-section{ min-height: var(--bg-fixed-h, 100svh); }
+  :root{
+    --header-h: 70px;
+    --section-pad: 60px;
+    --mobile-player-h: 70px;
+  }
+
+  .phase-section{
+    min-height: var(--bg-fixed-h, 100svh);
+  }
+
+  /* Works: keep Poolside to rooftop near the top instead of
+     vertically centering it inside the full mobile screen. */
+  .tab-view[data-tab-view="works"] .phase-section[data-phase="light"]{
+    justify-content: flex-start;
+    padding-top: calc(var(--header-h) + 20px);
+    padding-bottom: calc(var(--mobile-player-h) + 28px);
+  }
+
+  /* About/Contact already reserve room for the fixed header internally,
+     so don't apply a second header offset through scroll-margin. */
+  .tab-view[data-tab-view="about"] .phase-section{
+    scroll-margin-top: 0;
+  }
+
+  .tab-view[data-tab-view="about"] .phase-section[data-phase="light"]{
+    justify-content: flex-start;
+    padding-top: calc(var(--header-h) + 24px);
+    padding-bottom: calc(var(--mobile-player-h) + 30px);
+  }
+
+  /* Give the final Contact section extra scroll room so its last links
+     can always move completely above the fixed player. */
+  .tab-view[data-tab-view="about"] .phase-section[data-phase="dark"]{
+    justify-content: flex-start;
+    min-height: calc(var(--bg-fixed-h, 100svh) + var(--mobile-player-h));
+    padding-top: calc(var(--header-h) + 24px);
+    padding-bottom: calc(
+      var(--mobile-player-h) + 32px + env(safe-area-inset-bottom)
+    );
+  }
+
   .main-nav{ flex-wrap: wrap; row-gap: 7px; gap: 20px; }
   .content{ margin-left: auto; margin-right: auto; width: 100%; }
   .headline{ font-size: clamp(31px, 10vw, 41px); }
-    .tag-eyebrow{ max-width: 117px; font-size: 11px; }
+  .tag-eyebrow{ max-width: 117px; font-size: 11px; }
   .social-links{ gap: 14px 18px; margin-top: 20px; }
   .nav-btn{ font-size: 12px; }
   .contact-info{ font-size: 14px; gap: 11px; align-items: flex-start; text-align: left; }
@@ -893,6 +935,7 @@ section{
   .pb-artwork{ display: none; }
   .pb-track{ margin-left: 19px; max-width: calc(50% - 95px); }
   .pb-row{ height: 65px; padding: 0 14px; gap: 9px; }
+
   .pb-title{
     font-size: 11px;
     display: block;
@@ -900,18 +943,22 @@ section{
     white-space: nowrap;
     line-height: 1.2;
   }
+
   .pb-title-inner{
     display: inline-block;
     white-space: nowrap;
   }
+
   .pb-title-inner.is-scrolling{
     padding-left: 100%;
     animation: pbMarquee 9s linear infinite;
   }
+
   @keyframes pbMarquee{
     0%{ transform: translateX(0); }
     100%{ transform: translateX(-100%); }
   }
+
   .collapse-head{ font-size: 11px; }
 }
 
