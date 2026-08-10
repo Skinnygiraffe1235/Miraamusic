@@ -11,9 +11,6 @@ lockBackgroundHeight();
 window.addEventListener('orientationchange', () => {
   setTimeout(lockBackgroundHeight, 200);
 });
-window.addEventListener('orientationchange', () => {
-  setTimeout(regenerateStars, 300);
-});
 
 /* Lock a CSS page height variable on meaningful resizes (not on transient URL-bar changes) */
 function setPageHeightLock(px) {
@@ -36,29 +33,17 @@ let progressBarWidth = 0;
 
 function createStars(count = 70) {
   if (!starsWrap || starsWrap.childElementCount) return;
-
-  // Use a stable pixel height reference so star positions don't shift
-  // when mobile browser chrome appears/disappears.
-  const referenceHeight = window.screen.height || window.innerHeight;
-  const maxStarTop = Math.max(1, Math.round(referenceHeight * 0.72));
-
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < count; i++) {
     const star = document.createElement('span');
     star.className = 'star';
     star.style.left = `${Math.random() * 100}%`;
-    star.style.top = `${Math.random() * maxStarTop}px`;
+    star.style.top = `${Math.random() * 72}%`;
     star.style.opacity = (0.3 + Math.random() * 0.7).toFixed(2);
     star.style.transform = `scale(${(0.7 + Math.random() * 1.1).toFixed(2)})`;
     fragment.appendChild(star);
   }
   starsWrap.appendChild(fragment);
-}
-
-function regenerateStars() {
-  if (!starsWrap) return;
-  starsWrap.innerHTML = '';
-  createStars();
 }
 
 function setThemeMix(t) {
