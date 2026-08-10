@@ -118,6 +118,13 @@ a:focus-visible, button:focus-visible{
   opacity: var(--mix);
   pointer-events: none;
 }
+
+@media (max-width: 640px){
+  .stars{
+    height: var(--bg-fixed-h, 100lvh);
+    bottom: auto;
+  }
+}
 .star{
   position: absolute;
   display: block;
@@ -233,7 +240,7 @@ section{
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   padding: var(--section-pad) clamp(29px, 5vw, 58px);
   color: var(--text);
   scroll-margin-top: var(--header-h);
