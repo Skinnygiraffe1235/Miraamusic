@@ -318,6 +318,15 @@
     src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/miraamusic-599839794/milano-sunset-01&auto_play=false&show_artwork=false&visual=false"></iframe>
 </div>
 
+<script>
+  // Temporary debug console — only loads when ?debug is in the URL
+  if (location.search.includes('debug')) {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/eruda';
+    s.onload = () => eruda.init();
+    document.head.appendChild(s);
+  }
+</script>
 <script src="https://w.soundcloud.com/player/api.js"></script>
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 <div id="spotifyEmbed" style="position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0.01;pointer-events:none;z-index:-1;"></div>
