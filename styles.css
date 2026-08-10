@@ -118,6 +118,12 @@ a:focus-visible, button:focus-visible{
   opacity: var(--mix);
   pointer-events: none;
 }
+@media (max-width: 640px){
+  .stars{
+    height: 100lvh;
+    bottom: auto;
+  }
+}
 .star{
   position: absolute;
   display: block;
