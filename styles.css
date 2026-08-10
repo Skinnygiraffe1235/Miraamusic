@@ -77,12 +77,7 @@ a:focus-visible, button:focus-visible{
   z-index: -3;
   overflow: hidden;
 }
-@media (max-width: 640px){
-  .bg-layer{
-    height: var(--bg-fixed-h, 100vh);
-    bottom: auto;
-  }
-}
+
 .bg-photo-day, .bg-photo-night{
   position: absolute;
   inset: 0;
