@@ -34,7 +34,7 @@ html{
   scroll-behavior: smooth;
   overflow-x: hidden;
   background: var(--chrome-bg);
-  overscroll-behavior-y: none;
+  overscroll-behavior-y: auto;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--chrome-bg) 55%, black 45%) var(--chrome-bg);
 }
