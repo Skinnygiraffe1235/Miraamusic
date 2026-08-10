@@ -427,7 +427,7 @@ function loadSoundCloudTrack(track, autoplay) {
   if (!scWidget) return;
 
   scWidget.load(track.url, {
-    auto_play: !!autoplay,
+    auto_play: false,
     callback: () => {
       scWidget.getDuration(d => {
         duration = d;
@@ -436,6 +436,10 @@ function loadSoundCloudTrack(track, autoplay) {
       scWidget.getCurrentSound(sound => {
         if (sound?.artwork_url) setArtwork(sound.artwork_url.replace('-large', '-t300x300'));
       });
+      // Explicit play() after load, rather than relying on auto_play —
+      // mobile browsers often refuse the autoplay flag but honor a direct call
+      // made in the same interaction chain as the user's tap.
+      if (autoplay) scWidget.play();
     }
   });
 }
