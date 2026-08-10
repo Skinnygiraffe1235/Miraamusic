@@ -27,6 +27,8 @@
   --player-accent: #E8562F;
   --header-h: 80px;
   --section-pad: 90px;
+  /* Locked page height used to avoid volatility when mobile browser chrome hides/shows */
+  --page-h: 100svh;
 }
 
 *{ box-sizing: border-box; margin: 0; padding: 0; }
@@ -236,7 +238,7 @@ section{
   color: var(--text);
   scroll-margin-top: var(--header-h);
 }
-.phase-section{ min-height: 100svh; padding-top: calc(var(--header-h) + var(--section-pad) * 0.4); }
+.phase-section{ min-height: var(--page-h); padding-top: calc(var(--header-h) + var(--section-pad) * 0.4); }
 .tab-view[data-tab-view="works"] .phase-section[data-phase="light"]{
   padding-top: calc(var(--header-h) + var(--section-pad) * 0.1);
 }
@@ -535,7 +537,7 @@ section{
 
 
 .phase-book{
-  min-height: 80svh;
+  min-height: calc(var(--page-h) * 0.8);
 }
 
 .btn-book{
