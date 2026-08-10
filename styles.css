@@ -78,6 +78,12 @@ a:focus-visible, button:focus-visible{
   z-index: -3;
   overflow: hidden;
 }
+@media (max-width: 640px){
+  .bg-layer{
+    height: var(--bg-fixed-h, 100vh);
+    bottom: auto;
+  }
+}
 .bg-photo-day, .bg-photo-night{
   position: absolute;
   inset: 0;
@@ -929,8 +935,6 @@ section{
   .pb-icon-pause{ width: 16px; height: 16px; }
   .pb-queue-toggle{ width: 32px; height: 32px; }
   .pb-queue-toggle svg{ width: 15px; height: 15px; }
-  :root{ --header-h: 60px; }
-  .pb-row{ height: 55px; }
 }
 
 @media (max-width: 480px){
