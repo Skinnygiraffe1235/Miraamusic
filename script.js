@@ -80,11 +80,7 @@ function updateOnScroll() {
   if (!lightSection || !darkSection) return;
 
   const scrollY = window.scrollY;
-  const stableViewportHeight = window.innerWidth <= 640
-  ? window.screen.height
-  : window.innerHeight;
-
-const viewportCenter = scrollY + stableViewportHeight * 0.5;
+  const viewportCenter = scrollY + window.innerHeight * 0.5;
   const transitionStart = lightSection.offsetTop + lightSection.offsetHeight * 0.85;
   const transitionEnd = darkSection.offsetTop + darkSection.offsetHeight * 0.15;
   let t = (viewportCenter - transitionStart) / Math.max(1, transitionEnd - transitionStart);
