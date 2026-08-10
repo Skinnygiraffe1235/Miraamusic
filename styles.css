@@ -233,7 +233,7 @@ section{
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding: var(--section-pad) clamp(29px, 5vw, 58px);
   color: var(--text);
   scroll-margin-top: var(--header-h);
