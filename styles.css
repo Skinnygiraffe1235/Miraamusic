@@ -231,6 +231,11 @@ section{
   scroll-margin-top: var(--header-h);
 }
 .phase-section{ min-height: 100svh; padding-top: calc(var(--header-h) + var(--section-pad) * 0.4); }
+@media (max-width: 640px){
+  .phase-section{ min-height: var(--vh-locked, 100svh); }
+  .phase-book{ min-height: calc(var(--vh-locked, 100svh) * 0.8); }
+  .bg-layer{ height: var(--vh-locked, 100vh); bottom: auto; }
+}
 .tab-view[data-tab-view="works"] .phase-section[data-phase="light"]{
   padding-top: calc(var(--header-h) + var(--section-pad) * 0.1);
 }
