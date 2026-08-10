@@ -1,5 +1,13 @@
 const root = document.documentElement;
 const body = document.body;
+function lockViewportHeight() {
+  root.style.setProperty('--vh-locked', window.innerHeight + 'px');
+}
+lockViewportHeight();
+window.addEventListener('orientationchange', () => {
+  setTimeout(lockViewportHeight, 250);
+});
+
 const starsWrap = document.getElementById('stars');
 const navButtons = [...document.querySelectorAll('.nav-btn')];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
