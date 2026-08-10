@@ -1,5 +1,17 @@
 const root = document.documentElement;
 const body = document.body;
+function lockBackgroundHeight() {
+  if (window.innerWidth > 640) {
+    root.style.removeProperty('--bg-fixed-h');
+    return;
+  }
+  root.style.setProperty('--bg-fixed-h', window.screen.height + 'px');
+}
+lockBackgroundHeight();
+window.addEventListener('orientationchange', () => {
+  setTimeout(lockBackgroundHeight, 200);
+});
+
 const starsWrap = document.getElementById('stars');
 const navButtons = [...document.querySelectorAll('.nav-btn')];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
