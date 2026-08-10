@@ -633,9 +633,6 @@ function commitSeek(pct) {
 
 pbProgress.addEventListener('pointerdown', (e) => {
   if (currentTrackIndex === -1) return;
-
-  e.preventDefault();
-
   isScrubbing = true;
   pbProgress.setPointerCapture(e.pointerId);
   previewSeek(pctFromEvent(e));
