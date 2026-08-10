@@ -111,10 +111,7 @@ a:focus-visible, button:focus-visible{
 
 .stars{
   position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: var(--bg-fixed-h, 100svh);
+  inset: 0;
   z-index: -2;
   opacity: var(--mix);
   pointer-events: none;
@@ -877,43 +874,12 @@ section{
 }
 
 @media (max-width: 640px){
-  :root{
-    --header-h: 70px;
-    --section-pad: 60px;
-    --mobile-player-h: 70px;
-  }
-
-  .phase-section{
-    min-height: var(--bg-fixed-h, 100svh);
-  }
-
-  .tab-view[data-tab-view="works"] .phase-section[data-phase="light"]{
-    justify-content: center;
-    padding-top: calc(var(--header-h) + var(--section-pad) * 0.4);
-    padding-bottom: var(--section-pad);
-  }
-
-  .tab-view[data-tab-view="about"] .phase-section{
-    scroll-margin-top: 0;
-  }
-
-  .tab-view[data-tab-view="about"] .phase-section[data-phase="light"]{
-    justify-content: center;
-    padding-top: calc(var(--header-h) + var(--section-pad) * 0.4);
-    padding-bottom: var(--section-pad);
-  }
-
-  .tab-view[data-tab-view="about"] .phase-section[data-phase="dark"]{
-    justify-content: center;
-    min-height: calc(var(--bg-fixed-h, 100svh) + var(--mobile-player-h));
-    padding-top: calc(var(--header-h) + var(--section-pad) * 0.4);
-    padding-bottom: var(--mobile-player-h);
-  }
-
+  :root{ --header-h: 70px; --section-pad: 60px; }
+  .phase-section{ min-height: 100dvh; }
   .main-nav{ flex-wrap: wrap; row-gap: 7px; gap: 20px; }
   .content{ margin-left: auto; margin-right: auto; width: 100%; }
   .headline{ font-size: clamp(31px, 10vw, 41px); }
-  .tag-eyebrow{ max-width: 117px; font-size: 11px; }
+    .tag-eyebrow{ max-width: 117px; font-size: 11px; }
   .social-links{ gap: 14px 18px; margin-top: 20px; }
   .nav-btn{ font-size: 12px; }
   .contact-info{ font-size: 14px; gap: 11px; align-items: flex-start; text-align: left; }
@@ -927,7 +893,6 @@ section{
   .pb-artwork{ display: none; }
   .pb-track{ margin-left: 19px; max-width: calc(50% - 95px); }
   .pb-row{ height: 65px; padding: 0 14px; gap: 9px; }
-
   .pb-title{
     font-size: 11px;
     display: block;
@@ -935,22 +900,18 @@ section{
     white-space: nowrap;
     line-height: 1.2;
   }
-
   .pb-title-inner{
     display: inline-block;
     white-space: nowrap;
   }
-
   .pb-title-inner.is-scrolling{
     padding-left: 100%;
     animation: pbMarquee 9s linear infinite;
   }
-
   @keyframes pbMarquee{
     0%{ transform: translateX(0); }
     100%{ transform: translateX(-100%); }
   }
-
   .collapse-head{ font-size: 11px; }
 }
 
