@@ -80,12 +80,9 @@ a:focus-visible, button:focus-visible{
 }
 @media (max-width: 640px){
   .bg-layer{
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: auto;
-    width: 100vw;
-    height: 100lvh;
+    inset: 0;
+    height: auto;
+    bottom: 0;
   }
 }
 .bg-photo-day, .bg-photo-night{
