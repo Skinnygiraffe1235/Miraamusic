@@ -13,15 +13,15 @@ window.addEventListener('orientationchange', () => {
 });
 
 /* Lock a CSS page height variable on meaningful resizes (not on transient URL-bar changes) */
-function getStableViewportHeight() {
-  return window.visualViewport?.height ?? window.innerHeight;
-}
 function setPageHeightLock(px) {
-  const height = typeof px === 'number' ? px : getStableViewportHeight();
-  root.style.setProperty('--page-h', height + 'px');
+  if (typeof px === 'number') {
+    root.style.setProperty('--page-h', px + 'px');
+    return;
+  }
+  // default: set to current innerHeight (layout viewport height)
+  root.style.setProperty('--page-h', window.innerHeight + 'px');
 }
 setPageHeightLock();
-window.addEventListener('load', setPageHeightLock);
 window.addEventListener('orientationchange', () => setTimeout(setPageHeightLock, 220));
 
 const starsWrap = document.getElementById('stars');
@@ -38,7 +38,7 @@ function createStars(count = 70) {
     const star = document.createElement('span');
     star.className = 'star';
     star.style.left = `${Math.random() * 100}%`;
-    star.style.top = `${Math.random() * window.screen.height * 0.72}px`;
+    star.style.top = `${Math.random() * 72}%`;
     star.style.opacity = (0.3 + Math.random() * 0.7).toFixed(2);
     star.style.transform = `scale(${(0.7 + Math.random() * 1.1).toFixed(2)})`;
     fragment.appendChild(star);
@@ -90,19 +90,22 @@ function updateOnScroll() {
   const target = activeView?.dataset.tabView ?? null;
 
   if (!lightSection || !darkSection) return;
-  const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
-  const viewportCenter = viewportHeight * 0.5;
-
-  const lightRect = lightSection.getBoundingClientRect();
-  const darkRect = darkSection.getBoundingClientRect();
-  const transitionStart = lightRect.top + lightRect.height * 0.85;
-  const transitionEnd = darkRect.top + darkRect.height * 0.15;
+  // Use visualViewport when available so the center remains stable while the browser chrome animates
+  const viewportCenter = (function getViewportCenter() {
+    if (window.visualViewport) {
+      const top = typeof window.visualViewport.pageTop === 'number' ? window.visualViewport.pageTop : window.scrollY;
+      return top + window.visualViewport.height * 0.5;
+    }
+    return window.scrollY + window.innerHeight * 0.5;
+  })();
+  const transitionStart = lightSection.offsetTop + lightSection.offsetHeight * 0.85;
+  const transitionEnd = darkSection.offsetTop + darkSection.offsetHeight * 0.15;
   let t = (viewportCenter - transitionStart) / Math.max(1, transitionEnd - transitionStart);
   t = Math.max(0, Math.min(1, t));
   t = t * t * (3 - 2 * t);
   setThemeMix(t);
 
-  const activePhase = viewportCenter >= darkRect.top ? 'dark' : 'light';
+  const activePhase = viewportCenter >= darkSection.offsetTop ? 'dark' : 'light';
   updateNavActiveState(target, activePhase);
 
   ticking = false;
@@ -267,21 +270,23 @@ function layoutRecalc() {
 }
 
 window.addEventListener('resize', () => {
-  // Always request a viewport-aware scroll update quickly
   requestScrollUpdate();
 
   const iw = window.innerWidth;
-  // Width change -> immediate, meaningful layout change (orientation or fold)
+
+  // Only treat width changes as real layout changes.
+  // Height-only changes are usually the mobile browser URL bar
+  // appearing/disappearing, so keep --page-h locked.
   if (iw !== lastInnerWidth) {
     lastInnerWidth = iw;
     clearTimeout(resizeTimer);
-    // update locked page height on meaningful change
     setPageHeightLock();
+    lockBackgroundHeight();
     layoutRecalc();
     return;
   }
 
-  // Height-only change (likely mobile URL bar) -> ignore the changing viewport height
+  // Height-only resize: keep the existing locked page height.
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     layoutRecalc();
