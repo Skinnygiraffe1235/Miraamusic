@@ -1,11 +1,13 @@
 const root = document.documentElement;
 const body = document.body;
-function lockViewportHeight() {
-  root.style.setProperty('--vh-locked', window.innerHeight + 'px');
+let stableViewportHeight = window.innerHeight;
+
+function updateStableViewportHeight() {
+  stableViewportHeight = window.innerHeight;
 }
-lockViewportHeight();
+
 window.addEventListener('orientationchange', () => {
-  setTimeout(lockViewportHeight, 250);
+  setTimeout(updateStableViewportHeight, 200);
 });
 
 const starsWrap = document.getElementById('stars');
@@ -76,7 +78,10 @@ function updateOnScroll() {
   if (!lightSection || !darkSection) return;
 
   const scrollY = window.scrollY;
-  const viewportCenter = scrollY + window.innerHeight * 0.5;
+const viewportHeight = window.innerWidth <= 640
+  ? stableViewportHeight
+  : window.innerHeight;
+const viewportCenter = scrollY + viewportHeight * 0.5;
   const transitionStart = lightSection.offsetTop + lightSection.offsetHeight * 0.85;
   const transitionEnd = darkSection.offsetTop + darkSection.offsetHeight * 0.15;
   let t = (viewportCenter - transitionStart) / Math.max(1, transitionEnd - transitionStart);
@@ -223,13 +228,27 @@ document.querySelectorAll('.collapse-head').forEach(head => {
 /* ---------- Consolidated resize handling ---------- */
 
 let resizeRAF = null;
+let lastViewportWidth = window.innerWidth;
+
 window.addEventListener('resize', () => {
+  const currentWidth = window.innerWidth;
+  const widthChanged = currentWidth !== lastViewportWidth;
+
+  if (window.innerWidth <= 640 && !widthChanged) {
+    return;
+  }
+
+  lastViewportWidth = currentWidth;
+  updateStableViewportHeight();
   requestScrollUpdate();
+
   if (resizeRAF !== null) return;
+
   resizeRAF = requestAnimationFrame(() => {
     resizeRAF = null;
     updateProgressBarWidth();
     checkTitleOverflow();
+
     document.querySelectorAll('.collapse-item.is-open .collapse-body-wrap').forEach(wrap => {
       wrap.style.maxHeight = wrap.scrollHeight + 'px';
     });
@@ -617,25 +636,51 @@ function commitSeek(pct) {
 
 pbProgress.addEventListener('pointerdown', (e) => {
   if (currentTrackIndex === -1) return;
+
+  e.preventDefault();
+
   isScrubbing = true;
+  pbProgress.classList.add('is-scrubbing');
+
   pbProgress.setPointerCapture(e.pointerId);
-  previewSeek(pctFromEvent(e));
+
+  const pct = pctFromEvent(e);
+  previewSeek(pct);
 });
 
 pbProgress.addEventListener('pointermove', (e) => {
   if (!isScrubbing) return;
-  previewSeek(pctFromEvent(e));
+
+  e.preventDefault();
+
+  const pct = pctFromEvent(e);
+  previewSeek(pct);
 });
 
 pbProgress.addEventListener('pointerup', (e) => {
   if (!isScrubbing) return;
+
+  e.preventDefault();
+
+  const pct = pctFromEvent(e);
+
   isScrubbing = false;
-  pbProgress.releasePointerCapture(e.pointerId);
-  commitSeek(pctFromEvent(e));
+  pbProgress.classList.remove('is-scrubbing');
+
+  if (pbProgress.hasPointerCapture(e.pointerId)) {
+    pbProgress.releasePointerCapture(e.pointerId);
+  }
+
+  commitSeek(pct);
 });
 
-pbProgress.addEventListener('pointercancel', () => {
+pbProgress.addEventListener('pointercancel', (e) => {
   isScrubbing = false;
+  pbProgress.classList.remove('is-scrubbing');
+
+  if (pbProgress.hasPointerCapture(e.pointerId)) {
+    pbProgress.releasePointerCapture(e.pointerId);
+  }
 });
 
 document.querySelectorAll('[data-track]').forEach(btn => {
