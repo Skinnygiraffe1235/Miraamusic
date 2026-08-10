@@ -119,6 +119,11 @@ function switchTab(target, scrollTarget) {
   function activateNext() {
     nextView.classList.add('active');
     refreshActivePhaseSections();
+
+    nextView.querySelectorAll('.collapse-item.is-open .collapse-body-wrap').forEach(wrap => {
+      wrap.style.maxHeight = wrap.scrollHeight + 'px';
+    });
+
     window.scrollTo({ top: 0, behavior: 'auto' });
 
     if (scrollTarget) {
@@ -230,13 +235,20 @@ let resizeRAF = null;
 window.addEventListener('resize', () => {
   requestScrollUpdate();
   if (resizeRAF !== null) return;
+
   resizeRAF = requestAnimationFrame(() => {
     resizeRAF = null;
+
     updateProgressBarWidth();
     checkTitleOverflow();
-    document.querySelectorAll('.collapse-item.is-open .collapse-body-wrap').forEach(wrap => {
-      wrap.style.maxHeight = wrap.scrollHeight + 'px';
-    });
+
+    const activeView = document.querySelector('.tab-view.active');
+
+    if (activeView) {
+      activeView.querySelectorAll('.collapse-item.is-open .collapse-body-wrap').forEach(wrap => {
+        wrap.style.maxHeight = wrap.scrollHeight + 'px';
+      });
+    }
   });
 });
 
