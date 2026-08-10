@@ -1,13 +1,15 @@
 const root = document.documentElement;
 const body = document.body;
-let stableViewportHeight = window.innerHeight;
-
-function updateStableViewportHeight() {
-  stableViewportHeight = window.innerHeight;
+function lockBackgroundHeight() {
+  if (window.innerWidth > 640) {
+    root.style.removeProperty('--bg-fixed-h');
+    return;
+  }
+  root.style.setProperty('--bg-fixed-h', window.screen.height + 'px');
 }
-
+lockBackgroundHeight();
 window.addEventListener('orientationchange', () => {
-  setTimeout(updateStableViewportHeight, 200);
+  setTimeout(lockBackgroundHeight, 200);
 });
 
 const starsWrap = document.getElementById('stars');
@@ -78,10 +80,7 @@ function updateOnScroll() {
   if (!lightSection || !darkSection) return;
 
   const scrollY = window.scrollY;
-const viewportHeight = window.innerWidth <= 640
-  ? stableViewportHeight
-  : window.innerHeight;
-const viewportCenter = scrollY + viewportHeight * 0.5;
+  const viewportCenter = scrollY + window.innerHeight * 0.5;
   const transitionStart = lightSection.offsetTop + lightSection.offsetHeight * 0.85;
   const transitionEnd = darkSection.offsetTop + darkSection.offsetHeight * 0.15;
   let t = (viewportCenter - transitionStart) / Math.max(1, transitionEnd - transitionStart);
@@ -228,27 +227,13 @@ document.querySelectorAll('.collapse-head').forEach(head => {
 /* ---------- Consolidated resize handling ---------- */
 
 let resizeRAF = null;
-let lastViewportWidth = window.innerWidth;
-
 window.addEventListener('resize', () => {
-  const currentWidth = window.innerWidth;
-  const widthChanged = currentWidth !== lastViewportWidth;
-
-  if (window.innerWidth <= 640 && !widthChanged) {
-    return;
-  }
-
-  lastViewportWidth = currentWidth;
-  updateStableViewportHeight();
   requestScrollUpdate();
-
   if (resizeRAF !== null) return;
-
   resizeRAF = requestAnimationFrame(() => {
     resizeRAF = null;
     updateProgressBarWidth();
     checkTitleOverflow();
-
     document.querySelectorAll('.collapse-item.is-open .collapse-body-wrap').forEach(wrap => {
       wrap.style.maxHeight = wrap.scrollHeight + 'px';
     });
@@ -636,51 +621,25 @@ function commitSeek(pct) {
 
 pbProgress.addEventListener('pointerdown', (e) => {
   if (currentTrackIndex === -1) return;
-
-  e.preventDefault();
-
   isScrubbing = true;
-  pbProgress.classList.add('is-scrubbing');
-
   pbProgress.setPointerCapture(e.pointerId);
-
-  const pct = pctFromEvent(e);
-  previewSeek(pct);
+  previewSeek(pctFromEvent(e));
 });
 
 pbProgress.addEventListener('pointermove', (e) => {
   if (!isScrubbing) return;
-
-  e.preventDefault();
-
-  const pct = pctFromEvent(e);
-  previewSeek(pct);
+  previewSeek(pctFromEvent(e));
 });
 
 pbProgress.addEventListener('pointerup', (e) => {
   if (!isScrubbing) return;
-
-  e.preventDefault();
-
-  const pct = pctFromEvent(e);
-
   isScrubbing = false;
-  pbProgress.classList.remove('is-scrubbing');
-
-  if (pbProgress.hasPointerCapture(e.pointerId)) {
-    pbProgress.releasePointerCapture(e.pointerId);
-  }
-
-  commitSeek(pct);
+  pbProgress.releasePointerCapture(e.pointerId);
+  commitSeek(pctFromEvent(e));
 });
 
-pbProgress.addEventListener('pointercancel', (e) => {
+pbProgress.addEventListener('pointercancel', () => {
   isScrubbing = false;
-  pbProgress.classList.remove('is-scrubbing');
-
-  if (pbProgress.hasPointerCapture(e.pointerId)) {
-    pbProgress.releasePointerCapture(e.pointerId);
-  }
 });
 
 document.querySelectorAll('[data-track]').forEach(btn => {
