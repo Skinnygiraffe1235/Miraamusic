@@ -12,6 +12,18 @@ window.addEventListener('orientationchange', () => {
   setTimeout(lockBackgroundHeight, 200);
 });
 
+/* Lock a CSS page height variable on meaningful resizes (not on transient URL-bar changes) */
+function setPageHeightLock(px) {
+  if (typeof px === 'number') {
+    root.style.setProperty('--page-h', px + 'px');
+    return;
+  }
+  // default: set to current innerHeight (layout viewport height)
+  root.style.setProperty('--page-h', window.innerHeight + 'px');
+}
+setPageHeightLock();
+window.addEventListener('orientationchange', () => setTimeout(setPageHeightLock, 220));
+
 const starsWrap = document.getElementById('stars');
 const navButtons = [...document.querySelectorAll('.nav-btn')];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -78,9 +90,14 @@ function updateOnScroll() {
   const target = activeView?.dataset.tabView ?? null;
 
   if (!lightSection || !darkSection) return;
-
-  const scrollY = window.scrollY;
-  const viewportCenter = scrollY + window.innerHeight * 0.5;
+  // Use visualViewport when available so the center remains stable while the browser chrome animates
+  const viewportCenter = (function getViewportCenter() {
+    if (window.visualViewport) {
+      const top = typeof window.visualViewport.pageTop === 'number' ? window.visualViewport.pageTop : window.scrollY;
+      return top + window.visualViewport.height * 0.5;
+    }
+    return window.scrollY + window.innerHeight * 0.5;
+  })();
   const transitionStart = lightSection.offsetTop + lightSection.offsetHeight * 0.85;
   const transitionEnd = darkSection.offsetTop + darkSection.offsetHeight * 0.15;
   let t = (viewportCenter - transitionStart) / Math.max(1, transitionEnd - transitionStart);
@@ -229,28 +246,52 @@ document.querySelectorAll('.collapse-head').forEach(head => {
   });
 });
 
-/* ---------- Consolidated resize handling ---------- */
+/* ---------- Consolidated resize handling (debounced and width-aware) ---------- */
 
-let resizeRAF = null;
-window.addEventListener('resize', () => {
+let lastInnerWidth = window.innerWidth;
+let resizeTimer = null;
+
+function layoutRecalc() {
+  // Keep scroll update responsive
   requestScrollUpdate();
-  if (resizeRAF !== null) return;
 
-  resizeRAF = requestAnimationFrame(() => {
-    resizeRAF = null;
-
+  // Schedule heavy recalcs in rAF
+  requestAnimationFrame(() => {
     updateProgressBarWidth();
     checkTitleOverflow();
 
     const activeView = document.querySelector('.tab-view.active');
-
     if (activeView) {
       activeView.querySelectorAll('.collapse-item.is-open .collapse-body-wrap').forEach(wrap => {
         wrap.style.maxHeight = wrap.scrollHeight + 'px';
       });
     }
   });
-});
+}
+
+window.addEventListener('resize', () => {
+  // Always request a viewport-aware scroll update quickly
+  requestScrollUpdate();
+
+  const iw = window.innerWidth;
+  // Width change -> immediate, meaningful layout change (orientation or fold)
+  if (iw !== lastInnerWidth) {
+    lastInnerWidth = iw;
+    clearTimeout(resizeTimer);
+    // update locked page height on meaningful change
+    setPageHeightLock();
+    layoutRecalc();
+    return;
+  }
+
+  // Height-only change (likely mobile URL bar) -> debounce and let it settle
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    // Update locked page height now that the viewport has settled
+    setPageHeightLock();
+    layoutRecalc();
+  }, 220);
+}, { passive: true });
 
 /* ---------- Custom bottom player (SoundCloud + Spotify) ---------- */
 
