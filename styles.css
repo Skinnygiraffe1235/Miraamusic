@@ -848,7 +848,7 @@ section{
 
 @media (max-width: 640px){
   :root{ --header-h: 70px; --section-pad: 60px; }
-  .phase-section{ min-height: 100dvh; }
+  .phase-section{ min-height: 100svh; }
   .main-nav{ flex-wrap: wrap; row-gap: 7px; gap: 20px; }
   .content{ margin-left: auto; margin-right: auto; width: 100%; }
   .headline{ font-size: clamp(31px, 10vw, 41px); }
