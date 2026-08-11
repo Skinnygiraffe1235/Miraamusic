@@ -306,7 +306,7 @@ const tracks = [
   { title: 'Progressive House', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:6i8AnUDQ4T6ee8ApYYTRta', accent: '#1DB954' },
   { title: 'Melodic Techno', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:3wZ97h31kIDL8XnAmwHKa9', accent: '#1DB954' },
   { title: 'Techno & Tech House', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:3lAtpVQq5fGrlEWnZ6UGN0', accent: '#1DB954' },
-  { title: 'Milano Sunset 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/milano-sunset-01', accent: '#8a3fae' }
+  { title: 'Milano Sunset #01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/milano-sunset-01', accent: '#8a3fae' }
 ];
 
 let currentSource = 'soundcloud';
