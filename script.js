@@ -296,16 +296,17 @@ window.addEventListener('resize', () => {
 /* ---------- Custom bottom player (SoundCloud + Spotify) ---------- */
 
 const tracks = [
-  { title: 'Milano Sunset 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/milano-sunset-01', accent: '#e8562f' },
+  { title: 'Funky House Mixtape #03', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/funky-house-mix-03', accent: '#e8562f' },
   { title: 'California Orange', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/california-orange', accent: '#ca919d' },
-  { title: 'Melodic Techno Mix 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/melodic-techno-mix-01', accent: '#8a3fae' },
-  { title: 'The Fourth State of Matter', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/spaceout', accent: '#641460' },
+  { title: 'Melodic Techno Mix #02', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/melodic-techno-mix-02', accent: '#8a3fae' },
+  { title: 'The Fourth State of Matter', artist: 'Miraa · Original', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/thefourthstateofmatter', accent: '#641460' },
   { title: 'Funk & Soul', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:5wHdvjWLoV2xavZC3bHOIy', accent: '#1DB954' },
   { title: 'Funky House', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:0zqOpSn5I5uRfCQuwm90pI', accent: '#1DB954' },
   { title: 'Deep House & Lounge', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:3sjXD8J3RaO0BMsPboQFYW', accent: '#1DB954' },
   { title: 'Progressive House', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:6i8AnUDQ4T6ee8ApYYTRta', accent: '#1DB954' },
   { title: 'Melodic Techno', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:3wZ97h31kIDL8XnAmwHKa9', accent: '#1DB954' },
-  { title: 'Techno & Tech House', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:3lAtpVQq5fGrlEWnZ6UGN0', accent: '#1DB954' }
+  { title: 'Techno & Tech House', artist: 'Spotify Playlist', type: 'spotify', uri: 'spotify:playlist:3lAtpVQq5fGrlEWnZ6UGN0', accent: '#1DB954' },
+  { title: 'Milano Sunset 01', artist: 'Miraa · Mix', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/milano-sunset-01', accent: '#8a3fae' }
 ];
 
 let currentSource = 'soundcloud';
