@@ -353,7 +353,7 @@ const tracks = [
   { title: 'SENZA META', artist: 'Mahdi · Score', type: 'local', url: 'SENZA%20META.mp3', accent: '#e1527e' },
   { title: 'Pelcast', artist: 'Mahdi · Audio Logo', type: 'local', url: 'Pelcast2.mp3', accent: '#e1527e' },
   { title: 'Arcade', artist: 'Mahdi · Game Score', type: 'local', url: 'arcade.mp3', accent: '#e1527e' },
-  { title: 'Miraamusic - ENAN', artist: 'Mahdi · Full Pop Rock Production', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/enan?si=529042ebbd624484bbccd41e71e8e92c&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing', accent: '#e1527e' },
+  { title: 'ENAN', artist: 'Miraa · Alt-Pop Production', type: 'soundcloud', url: 'https://soundcloud.com/miraamusic-599839794/enan?si=529042ebbd624484bbccd41e71e8e92c&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing', accent: '#e1527e' },
   { title: 'Funk Rock Mix', artist: 'Mahdi · Stem Mix', type: 'local', url: 'Funk%20rock%20mix.mp3', accent: '#e1527e' }
 ];
 
